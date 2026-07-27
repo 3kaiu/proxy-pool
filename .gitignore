@@ -15,3 +15,6 @@ proxies.db
 # IDE
 .vscode/
 .idea/
+relay-linux-amd64
+relay-local
+hf-space/relay-linux-amd64

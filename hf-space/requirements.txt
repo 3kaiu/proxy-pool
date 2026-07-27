@@ -1,0 +1,1 @@
+# No Python dependencies needed - the Go binary is self-contained.

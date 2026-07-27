@@ -15,20 +15,15 @@ FROM alpine:3.20
 
 RUN apk add --no-cache ca-certificates
 
-# HF Spaces requires running as user 1000
 RUN adduser -D -u 1000 relay
 
 WORKDIR /app
 COPY --from=builder /build/relay /usr/local/bin/
 
-# Default port 7860 for HF Spaces (override with RELAY_LISTEN for other platforms)
-ENV RELAY_LISTEN=:7860
 ENV RELAY_TARGET=https://opencode.ai/zen
 ENV RELAY_MAX_RETRIES=50
 ENV RELAY_TIMEOUT=5
 
-EXPOSE 7860
-
-USER relay
-
-CMD ["relay"]
+# Shell form so $PORT (set by Render/Northflank/etc.) is expanded at runtime.
+# Falls back to :7860 if PORT is not set.
+CMD sh -c 'RELAY_LISTEN="${RELAY_LISTEN:-:${PORT:-7860}}" relay'
