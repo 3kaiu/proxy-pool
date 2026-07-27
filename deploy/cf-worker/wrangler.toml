@@ -1,0 +1,10 @@
+name = "opencode-zen-relay"
+main = "worker.js"
+compatibility_date = "2024-09-01"
+
+# 可选：设置 API 密钥保护你的 Worker
+# [vars]
+# API_KEY = "your-secret-key"
+
+# 部署：npx wrangler deploy
+# 或：在 CF Dashboard -> Workers -> 新建 -> 粘贴 worker.js 内容

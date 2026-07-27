@@ -1,0 +1,44 @@
+# Fly.io 部署配置 - 完整代理池
+#
+# Fly.io 免费额度：
+#   - 3 个 shared-cpu-1x VM (256MB RAM)
+#   - 3GB 持久存储卷
+#   - 每月 160GB 出站流量
+#
+# 部署：
+#   flyctl launch --no-deploy  # 首次初始化
+#   flyctl volumes create proxy_data --region nrt  # 创建数据卷（nrt=东京，hkg=香港）
+#   flyctl deploy
+#
+# 使用：
+#   https://your-app.fly.dev/count
+#   https://your-app.fly.dev/get?count=10
+#   https://your-app.fly.dev/pop
+
+app = "proxy-pool"
+primary_region = "nrt"  # 东京节点，延迟低
+
+[build]
+  dockerfile = "../Dockerfile"
+
+[http_service]
+  internal_port = 5010
+  force_https = true
+  auto_stop_machines = false  # 不自动停止，保持代理池常驻
+  min_machines_running = 1    # 至少 1 台机器运行
+
+# 持久存储卷（保存 SQLite 数据库）
+[[mounts]]
+  source = "proxy_data"
+  destination = "/app/data"
+
+[env]
+  PROXY_POOL_LISTEN = ":5010"
+  PROXY_POOL_TARGET_URL = "https://opencode.ai/zen/v1/models"
+  PROXY_POOL_DB_PATH = "/app/data/proxies.db"
+
+# 免费额度内的 VM 规格
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 256

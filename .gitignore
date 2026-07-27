@@ -1,0 +1,17 @@
+# Binaries
+proxy-pool
+relay
+batch-zen
+test-zen
+*.exe
+
+# Database
+proxies.db
+*.db
+
+# OS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
