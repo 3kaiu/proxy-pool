@@ -1,22 +1,17 @@
 # Koyeb 部署配置 - 免费且不需要信用卡
 #
 # 部署步骤：
-#   1. 注册 https://www.koyeb.com （用 GitHub/Google 登录，通常不需要信用卡）
-#   2. 方式一：连接 GitHub 仓库，Koyeb 自动检测 Dockerfile
-#   方式二：用 koyeb CLI
-#     koyeb app create proxy-pool --docker github-username/proxy-pool
-#   3. 设置环境变量：
-#     PROXY_POOL_LISTEN=:5010
-#     PROXY_POOL_TARGET_URL=https://opencode.ai/zen/v1/models
-#     PROXY_POOL_DB_PATH=/app/data/proxies.db
-#   4. 暴露端口 5010
+#   1. 注册 https://www.koyeb.com （用 GitHub 登录）
+#   2. Create Service -> GitHub -> 选 3kaiu/proxy-pool
+#   3. Builder 选 Docker，端口 5010
+#   4. 部署后拿到 https://xxx.koyeb.app
 #
-# 防休眠：用 UptimeRobot (免费) 每 5 分钟 ping 一次 https://your-app.koyeb.app/count
+# 防休眠：用 UptimeRobot (免费) 每 5 分钟 ping https://your-app.koyeb.app/count
 #
 # 使用：
-#   聊天：POST https://your-app.koyeb.app/v1/chat/completions
 #   模型：GET  https://your-app.koyeb.app/v1/models
-#   池状态：GET https://your-app.koyeb.app/count
+#   聊天：POST https://your-app.koyeb.app/v1/chat/completions
+#   状态：GET  https://your-app.koyeb.app/count
 
 [service]
   name = "proxy-pool"
@@ -25,6 +20,7 @@
   health_check = "/count"
 
 [env]
-  PROXY_POOL_LISTEN = ":5010"
-  PROXY_POOL_TARGET_URL = "https://opencode.ai/zen/v1/models"
-  PROXY_POOL_DB_PATH = "/app/data/proxies.db"
+  RELAY_LISTEN = ":5010"
+  RELAY_TARGET = "https://opencode.ai/zen"
+  RELAY_MAX_RETRIES = "50"
+  RELAY_TIMEOUT = "5"
