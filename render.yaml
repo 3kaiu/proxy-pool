@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: proxy-pool-relay
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /count
+    autoDeploy: true
+    envVars:
+      - key: RELAY_TARGET
+        value: https://opencode.ai/zen
+      - key: RELAY_MAX_RETRIES
+        value: 50
+      - key: RELAY_TIMEOUT
+        value: 5
